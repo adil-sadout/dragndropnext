@@ -1,12 +1,16 @@
 import Head from 'next/head'
+import {useEffect, useState} from "react"
 import CryptoList from '../components/cryptoList'
+
+import { resetServerContext } from 'react-beautiful-dnd';
+import { DragDropContext } from 'react-beautiful-dnd';
+
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { resetServerContext } from 'react-beautiful-dnd';
-import { DragDropContext } from 'react-beautiful-dnd';
-import {useEffect, useState} from "react"
-
 
 
 
@@ -36,6 +40,8 @@ export default function Home({ data }) {
     
     
   ])
+
+  const [popupMessage, setPopupMessage] = useState(null)
 
   const [orderedList, setOrderedList]= useState([
     {
@@ -69,6 +75,23 @@ export default function Home({ data }) {
   }
 
 
+
+  const handleCheckOrder = (e, orderedList, correctOrder) =>{
+    e.preventDefault();
+    let counter = 0;
+    correctOrder.forEach((order, index )=>{
+      if (order.name === orderedList[index].name){
+        counter+=1;
+      }else{
+        setPopupMessage(false)
+      }
+      if(counter === correctOrder.length){
+        setPopupMessage(true)
+      }
+    })
+  }
+
+
   return (
     <div >
       <Head>
@@ -78,10 +101,38 @@ export default function Home({ data }) {
       </Head>
 
       <Container maxWidth="xs" sx={{textAlign:"center", height:"100vh", display:"flex", flexDirection:"column",justifyContent:"center"}}>
+
+        {
+          (popupMessage===true)?
+          <Stack sx={{ width: '100%' }} spacing={2}>
+            <Alert severity="success">
+              
+              Congrats — <strong>You won!</strong>
+            </Alert>
+          </Stack>
+          :
+          <>
+          {
+            (popupMessage===false)?
+            <>
+              <Stack sx={{ width: '100%' }} spacing={2}>
+                <Alert severity="error">
+                  
+                  Wrong — <strong>You lost!</strong>
+                </Alert>
+              </Stack>
+            </>:
+            <></>
+            
+          }
+          </>
+        }
         
         <Typography variant="h2"  color="secondary">
-          Order The List
+          Order The Projects
         </Typography>
+
+
 
         
         <DragDropContext onDragEnd={handleOnDragEnd}>
@@ -92,7 +143,7 @@ export default function Home({ data }) {
         
         
 
-        <Button variant="contained" color="secondary">Check Order</Button>
+        <Button onClick={e => handleCheckOrder(e, orderedList, correctOrder)} variant="contained" color="secondary">Check Order</Button>
 
       </Container>
 
