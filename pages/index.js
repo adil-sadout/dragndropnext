@@ -102,6 +102,25 @@ export default function Home({ data }) {
 
       <Container maxWidth="xs" sx={{textAlign:"center", height:"100vh", display:"flex", flexDirection:"column",justifyContent:"center"}}>
 
+        
+        
+        <Typography variant="h2"  color="secondary">
+          Order The Projects
+        </Typography>
+
+
+
+        
+        <DragDropContext onDragEnd={handleOnDragEnd}>
+          <CryptoList orderedList={orderedList} setOrderedList={setOrderedList}/>
+        </DragDropContext>
+          
+        
+        
+        
+
+        <Button onClick={e => handleCheckOrder(e, orderedList, correctOrder)} variant="contained" color="secondary">Check Order</Button>
+        <br />
         {
           (popupMessage===true)?
           <Stack sx={{ width: '100%' }} spacing={2}>
@@ -127,25 +146,9 @@ export default function Home({ data }) {
           }
           </>
         }
-        
-        <Typography variant="h2"  color="secondary">
-          Order The Projects
-        </Typography>
-
-
-
-        
-        <DragDropContext onDragEnd={handleOnDragEnd}>
-          <CryptoList orderedList={orderedList} setOrderedList={setOrderedList}/>
-        </DragDropContext>
-          
-        
-        
-        
-
-        <Button onClick={e => handleCheckOrder(e, orderedList, correctOrder)} variant="contained" color="secondary">Check Order</Button>
-
       </Container>
+
+      
 
       
     </div>
